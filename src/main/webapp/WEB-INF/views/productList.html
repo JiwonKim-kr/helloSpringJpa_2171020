@@ -37,6 +37,23 @@
 
     <h1>상품 목록</h1>
 
+    <!-- 검색 폼 시작 -->
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #ddd;">
+        <form th:action="@{/products}" method="get" style="display: flex; gap: 10px; align-items: center; margin: 0;">
+            <select name="categoryId" style="padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">
+                <option value="">-- 카테고리 전체 --</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"
+                        th:selected="${cat.id == categoryId}"></option>
+            </select>
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="상품명 검색..." style="padding: 8px; flex-grow: 1; border: 1px solid #ced4da; border-radius: 4px;">
+            <button type="submit" class="btn" style="margin-bottom: 0;">조회</button>
+            <a th:href="@{/products}" class="btn" style="margin-bottom: 0; background: #6c757d;">초기화</a>
+        </form>
+    </div>
+    <!-- 검색 폼 끝 -->
+
     <!--
         th:if="${successMessage}":
         Model에 successMessage 속성이 있을 때만 이 div를 렌더링합니다.
@@ -48,9 +65,11 @@
     </div>
 
     <a class="btn" th:href="@{/products/create}">+ 새 상품 등록</a>
+    <a class="btn" th:href="@{/categories}" style="background: #27ae60;">카테고리 관리</a>
 
     <div class="empty-msg" th:if="${#lists.isEmpty(products)}">
-        등록된 상품이 없습니다. 새 상품을 등록해 주세요.
+        <span th:if="${keyword != null or categoryId != null}">조회 조건에 일치하는 상품이 없습니다.</span>
+        <span th:unless="${keyword != null or categoryId != null}">등록된 상품이 없습니다. 새 상품을 등록해 주세요.</span>
     </div>
 
     <table th:unless="${#lists.isEmpty(products)}">
