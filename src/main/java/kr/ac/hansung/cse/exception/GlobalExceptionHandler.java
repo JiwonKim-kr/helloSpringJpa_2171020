@@ -96,6 +96,26 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
+    @ExceptionHandler(DuplicateCategoryException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleDuplicateCategory(DuplicateCategoryException ex, Model model) {
+        model.addAttribute("errorCode", "400");
+        model.addAttribute("errorTitle", "카테고리 등록 실패");
+        model.addAttribute("errorMessage", ex.getMessage());
+        model.addAttribute("errorDetail", "다른 이름을 사용하여 다시 시도해 주세요.");
+        return "error";
+    }
+
+    @ExceptionHandler(CategoryInUseException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleCategoryInUse(CategoryInUseException ex, Model model) {
+        model.addAttribute("errorCode", "409");
+        model.addAttribute("errorTitle", "카테고리 삭제 불가");
+        model.addAttribute("errorMessage", ex.getMessage());
+        model.addAttribute("errorDetail", "해당 카테고리에 속한 상품을 모두 삭제하거나 다른 카테고리로 이동한 후 다시 시도해 주세요.");
+        return "error";
+    }
+
     /**
      * ─────────────────────────────────────────────────────────────────
      * 500 Internal Server Error: 예상치 못한 모든 예외 (최종 안전망)
