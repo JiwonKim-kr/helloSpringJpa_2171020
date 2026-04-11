@@ -134,5 +134,8 @@
 
     </form>
 
+    <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 0.9em;">
+        <p th:text="${'실습 수행 일시: ' + #temporals.format(#temporals.createNow(), 'yyyy년 MM월 dd일 (E) a hh:mm:ss') + '  |  학번: 2171020  |  성명: 김지원'}"></p>
+    </footer>
 </body>
 </html>
