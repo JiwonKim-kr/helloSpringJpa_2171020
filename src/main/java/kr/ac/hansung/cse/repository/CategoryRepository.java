@@ -24,7 +24,7 @@ public class CategoryRepository {
     }
 
     public List<Category> findAll() {
-        return em.createQuery("SELECT c FROM Category c ORDER BY c.id", Category.class)
+        return em.createQuery("SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.products ORDER BY c.id", Category.class)
                 .getResultList();
     }
 
