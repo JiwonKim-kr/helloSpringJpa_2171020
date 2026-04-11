@@ -106,15 +106,7 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
-    @ExceptionHandler(CategoryInUseException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public String handleCategoryInUse(CategoryInUseException ex, Model model) {
-        model.addAttribute("errorCode", "409");
-        model.addAttribute("errorTitle", "카테고리 삭제 불가");
-        model.addAttribute("errorMessage", ex.getMessage());
-        model.addAttribute("errorDetail", "해당 카테고리에 속한 상품을 모두 삭제하거나 다른 카테고리로 이동한 후 다시 시도해 주세요.");
-        return "error";
-    }
+
 
     /**
      * ─────────────────────────────────────────────────────────────────

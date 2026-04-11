@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import kr.ac.hansung.cse.exception.DuplicateCategoryException;
-import kr.ac.hansung.cse.exception.CategoryInUseException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -48,12 +47,11 @@ public class CategoryController {
         }
 
         try {
-            Category savedCategory = categoryService.createCategory(categoryForm.getName());
-            redirectAttributes.addFlashAttribute("successMessage",
-                    "'" + savedCategory.getName() + "' 카테고리가 성공적으로 등록되었습니다.");
+            categoryService.createCategory(categoryForm.getName());
+            redirectAttributes.addFlashAttribute("successMessage", "등록 완료");
             return "redirect:/categories";
         } catch (DuplicateCategoryException e) {
-            bindingResult.addError(new FieldError("categoryForm", "name", e.getMessage()));
+            bindingResult.rejectValue("name", "duplicate", e.getMessage());
             return "categoryForm";
         }
     }
@@ -62,11 +60,9 @@ public class CategoryController {
     public String deleteCategory(@PathVariable Long id,
                                  RedirectAttributes redirectAttributes) {
         try {
-            Category category = categoryService.getCategoryById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ID"));
-            String categoryName = category.getName();
             categoryService.deleteCategory(id);
-            redirectAttributes.addFlashAttribute("successMessage", "'" + categoryName + "' 카테고리가 삭제되었습니다.");
-        } catch (CategoryInUseException | IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("successMessage", "삭제 완료");
+        } catch (IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/categories";
